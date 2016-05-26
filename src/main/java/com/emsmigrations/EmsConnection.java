@@ -25,14 +25,11 @@
 package com.emsmigrations;
 
 /**
- * Created by adambuksztaler on 10/01/16.
+ * Represents EMS connection details.
  */
 public class EmsConnection implements Utils{
 
     public static final String DEFAULT_NAME = "default";
-    public final static String DEFAULT_INITIAL_CONTEXT_FACTORY = "com.tibco.tibjms.naming.TibjmsInitialContextFactory";
-    public final static String DEFAULT_CONNECTION_FACTORY = "QueueConnectionFactory";
-    public final static String DEFAULT_QUEUE_NAME = "q.ems-migrations.server.version";
 
     public final String name;
     public final String url;
@@ -57,9 +54,9 @@ public class EmsConnection implements Utils{
         this.user                   = user;
         this.password               = password;
         this.emsHome                = emsHome;
-        this.initialContextFactory  = nvl(initialContextFactory, DEFAULT_INITIAL_CONTEXT_FACTORY);
-        this.connectionFactory      = nvl(connectionFactory, DEFAULT_CONNECTION_FACTORY);
-        this.queueName              = nvl(queueName, DEFAULT_QUEUE_NAME);
+        this.initialContextFactory  = nvl(initialContextFactory, Properties.CTXFACTORY.defaultValue);
+        this.connectionFactory      = nvl(connectionFactory, Properties.CONFACTORY.defaultValue);
+        this.queueName              = nvl(queueName, Properties.QUEUE.defaultValue);
     }
 
     /*

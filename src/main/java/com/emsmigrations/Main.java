@@ -32,8 +32,6 @@ import java.util.Map;
  */
 public class Main {
 
-    private static final String VERSION =           "0.1";
-
     private static final String TAB =               "\t";
 
     private static MigrationManager manager;
@@ -65,7 +63,7 @@ public class Main {
     }
 
     static void printHeader(Map<String, String> args) {
-        println("EMS Migrations version " + VERSION);
+        println("EMS Migrations");
         println("Running command: " + args.get(Properties.COMMAND.propertyName));
     }
 
@@ -81,7 +79,7 @@ public class Main {
         boolean failed = migMap.values().contains(Boolean.FALSE);
         println("Migrations executed " + ((failed) ? "WITH ERRORS" : "with no errors"));
         println();
-        migMap.forEach((k, v) -> println(k + "\t\t\t:\t" + (v ? "OK" : "ERR")));
+        migMap.forEach((k, v) -> println(k + TAB + TAB + TAB + ":" + TAB + (v ? "OK" : "ERR")));
     }
 
     static void runCommand(String command, Map<String, String> options) {
@@ -153,7 +151,7 @@ public class Main {
 
     static MigrationManager createMigrationManager(Map<String, String> options) throws MigrationException {
         String type = options.get(Properties.TYPE.propertyName);
-        String paramType = (type == null)? MigrationManagerFactory.TYPE_DEFAULT : type;
+        String paramType = (type == null)? MigrationManagerFactory.DEFAULT : type;
         MigrationManager manager = MigrationManagerFactory.createMigrationManager(paramType, options);
 
         return manager;

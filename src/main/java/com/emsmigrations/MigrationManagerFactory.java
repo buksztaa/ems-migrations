@@ -27,19 +27,11 @@ package com.emsmigrations;
 import java.util.Map;
 
 /**
- * Created by adambuksztaler on 13/01/16.
+ * Creates <code>MigrationManager</code> based on type provided (file migrations are the default).
  */
 public class MigrationManagerFactory {
 
-    public static final String DEFAULTS_TYPE = "file";
-
-    public static final String TYPE_DEFAULT = DEFAULTS_TYPE;
-
-    public static final String PARAM_MIGRATIONS_DIR = "migrationsdir";
-    public static final String PARAM_CONNECTION_URL = "url";
-    public static final String PARAM_CONNECTION_USER = "user";
-    public static final String PARAM_CONNECTION_PW = "pw";
-    public static final String PARAM_EMS_HOME = "emshome";
+    public static final String DEFAULT = Properties.TYPE.defaultValue;
 
     private MigrationManagerFactory() {
 
@@ -53,17 +45,17 @@ public class MigrationManagerFactory {
 
     public static MigrationManager createMigrationManager(String type, Map<String, String> parameters) throws MigrationException{
         MigrationManager result;
-        String migrationsDir = parameters.get(PARAM_MIGRATIONS_DIR);
-        String connectionUrl = parameters.get(PARAM_CONNECTION_URL);
-        String connectionUser = parameters.get(PARAM_CONNECTION_USER);
-        String connectionPw = parameters.get(PARAM_CONNECTION_PW);
-        String emsHome = parameters.get(PARAM_EMS_HOME);
+        String migrationsDir    = parameters.get(Properties.DIR.propertyName);
+        String connectionUrl    = parameters.get(Properties.URL.propertyName);
+        String connectionUser   = parameters.get(Properties.USER.propertyName);
+        String connectionPw     = parameters.get(Properties.PW.propertyName);
+        String emsHome          = parameters.get(Properties.EMSHOME.propertyName);
 
         EmsConnection connection = EmsConnection.create(connectionUrl, connectionUser, connectionPw, emsHome);
 
-        if (DEFAULTS_TYPE.equals(type)) {
+        if (DEFAULT.equals(type)) {
             if (migrationsDir == null)  {
-                throw new MigrationException("Cannot create MigrationManager. Param " + PARAM_MIGRATIONS_DIR + " not provided.");
+                throw new MigrationException("Cannot create MigrationManager. Param " + Properties.DIR.propertyName + " not provided.");
             }
 
             result =  FileMigrationManager.create(migrationsDir, connection);

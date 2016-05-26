@@ -31,27 +31,27 @@ import java.util.Arrays;
  */
 public enum Properties {
 
-    DIR             ("dir",         "Migrations root directory"),
-    EMSHOME         ("emshome",     "EMS local installation home directory"),
-    URL             ("url",         "EMS connection url"),
-    USER            ("user",        "EMS connection username"),
-    PW              ("pw",          "EMS connection password"),
-    VER             ("ver",         "Migration version"),
-    DESC            ("desc",        "Migration description"),
-    TYPE            ("type"),
-    COMMAND         ("command",     "Application command"),
-    FACTORY         ("factory",     "EMS connection factory"),
-    QUEUE           ("queue",       "EMS migration queue");
+    DIR             ("dir",         null,                                                   "Migrations root directory"),
+    EMSHOME         ("emshome",     null,                                                   "EMS local installation home directory"),
+    URL             ("url",         null,                                                   "EMS connection url"),
+    USER            ("user",        "admin",                                                "EMS connection username"),
+    PW              ("pw",          "",                                                     "EMS connection password"),
+    VER             ("ver",         null,                                                   "Migration version"),
+    DESC            ("desc",        null,                                                   "Migration description"),
+    TYPE            ("type",        "file",                                                 "Migrations type"),
+    COMMAND         ("command",     null,                                                   "Application command"),
+    CONFACTORY      ("confactory",  "QueueConnectionFactory",                               "EMS connection factory object"),
+    QUEUE           ("queue",       "q.ems-migrations.server.version",                      "EMS migration queue"),
+    CTXFACTORY      ("ctxfactory",  "com.tibco.tibjms.naming.TibjmsInitialContextFactory",  "Initial context factory class");
 
     public final String propertyName;
     public final String propertyDescription;
+    public final String defaultValue;
 
-    Properties(String propertyName) {
-        this(propertyName, "");
-    }
 
-    Properties(String propertyName, String propertyDescription) {
+    Properties(String propertyName, String defaultValue, String propertyDescription) {
         this.propertyName           = propertyName;
+        this.defaultValue           = defaultValue;
         this.propertyDescription    = propertyDescription;
     }
 

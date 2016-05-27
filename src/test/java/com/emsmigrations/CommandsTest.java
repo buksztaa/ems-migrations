@@ -23,7 +23,15 @@
  */
 package com.emsmigrations;
 
-public interface Closure {
+import org.junit.Test;
 
-    void execute() throws Exception;
+public class CommandsTest extends ExtendedTestCase{
+
+    @Test
+    public void testContains() {
+        assertTrue(Commands.contains("migrate"));
+        assertFalse(Commands.contains("MIGRATE"));
+        assertFalse(Commands.contains(null));
+        assertFalse(Commands.contains("nonexisting"));
+    }
 }

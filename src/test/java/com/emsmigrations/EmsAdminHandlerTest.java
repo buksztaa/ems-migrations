@@ -30,9 +30,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/**
- * Created by adambuksztaler on 20/02/16.
- */
 public class EmsAdminHandlerTest extends ExtendedTestCase {
 
     private File emsBin;

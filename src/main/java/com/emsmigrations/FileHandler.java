@@ -33,7 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Created by adambuksztaler on 11/01/16.
+ * Handles file access.
  */
 public class FileHandler {
 

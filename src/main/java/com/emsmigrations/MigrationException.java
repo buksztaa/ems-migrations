@@ -25,7 +25,7 @@
 package com.emsmigrations;
 
 /**
- * Created by adambuksztaler on 10/01/16.
+ * Wraps all errors thrown across the application.
  */
 public class MigrationException extends Exception{
 

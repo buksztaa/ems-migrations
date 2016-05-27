@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by adambuksztaler on 22/02/16.
+ * Handles JMS connection.
  */
 public class JmsHandler implements Utils{
 

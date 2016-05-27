@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by adambuksztaler on 19/02/16.
+ * Handles EMS Admin invocation.
  */
 public class EmsAdminHandler implements Utils{
 

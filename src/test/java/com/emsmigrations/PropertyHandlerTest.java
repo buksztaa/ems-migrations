@@ -32,9 +32,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-/**
- * Created by adambuksztaler on 19/01/16.
- */
 public class PropertyHandlerTest extends TestCase {
 
     File migrationsDir = new File("build/migrations");
@@ -92,7 +89,7 @@ public class PropertyHandlerTest extends TestCase {
     }
 
     @Test
-    public void testPrppertiesFileAndgPropertiesMap() {
+    public void testPropertiesFileAndPropertiesMap() {
         Map<String, String> properties = new HashMap();
         properties.put("key1", "value1");
         properties.put("key2", "thisIsOverriden");

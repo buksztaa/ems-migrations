@@ -30,9 +30,6 @@ import java.io.FileReader;
 import java.util.Properties;
 import java.util.Random;
 
-/**
- * Created by adambuksztaler on 18/04/16.
- */
 public class JmsHandlerTest extends ExtendedTestCase {
 
     private JmsHandler handler;

@@ -27,7 +27,7 @@ package com.emsmigrations;
 import java.util.Map;
 
 /**
- * Created by adambuksztaler on 10/01/16.
+ * Main interface of the application.
  */
 public interface MigrationManager {
 

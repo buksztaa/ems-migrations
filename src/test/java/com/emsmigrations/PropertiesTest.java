@@ -23,7 +23,15 @@
  */
 package com.emsmigrations;
 
-public interface Closure {
+import org.junit.Test;
 
-    void execute() throws Exception;
+public class PropertiesTest extends ExtendedTestCase {
+
+    @Test
+    public void testContains() {
+        assertTrue(Properties.contains("url"));
+        assertFalse(Properties.contains("URL"));
+        assertFalse(Properties.contains(null));
+        assertFalse(Properties.contains("nonexisting"));
+    }
 }

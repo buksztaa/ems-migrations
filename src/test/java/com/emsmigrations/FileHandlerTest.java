@@ -29,9 +29,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by adambuksztaler on 18/01/16.
- */
 public class FileHandlerTest extends ExtendedTestCase {
 
     File migrationsDir = new File("build/migrations");

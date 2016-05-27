@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by adambuksztaler on 10/01/16.
+ * File-based implementation of <code>MigrationManager</code> interface.
  */
 public class FileMigrationManager extends AbstractMigrationManager implements Utils{
 

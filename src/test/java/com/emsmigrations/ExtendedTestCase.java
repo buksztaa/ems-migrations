@@ -27,9 +27,6 @@ import junit.framework.TestCase;
 
 import java.util.List;
 
-/**
- * Created by adambuksztaler on 26/01/16.
- */
 public abstract class ExtendedTestCase extends TestCase{
 
     private boolean runWithErrorHandling(Closure closure) {

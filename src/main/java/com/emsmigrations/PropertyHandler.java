@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Created by adambuksztaler on 14/01/16.
+ * Handles retrieval of properties.
  */
 public class PropertyHandler {
 
@@ -74,6 +74,10 @@ public class PropertyHandler {
 
     public String getProperty(String value) {
         return properties.get(value);
+    }
+
+    public Map<String, String> getProperties() {
+        return Collections.unmodifiableMap(properties);
     }
 
     /*

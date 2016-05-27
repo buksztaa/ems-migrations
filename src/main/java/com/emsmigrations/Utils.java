@@ -24,7 +24,7 @@
 package com.emsmigrations;
 
 /**
- * Created by adambuksztaler on 22/02/16.
+ * Various utility methods used across the application.
  */
 public interface Utils {
 

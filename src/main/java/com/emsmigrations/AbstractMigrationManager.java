@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by adambuksztaler on 12/01/16.
+ * MigrationManager implementation abstraction.
  */
 public abstract class AbstractMigrationManager implements MigrationManager {
 

@@ -27,9 +27,6 @@ import org.junit.Test;
 
 import java.util.Map;
 
-/**
- * Created by adambuksztaler on 26/01/16.
- */
 public class MainTest extends ExtendedTestCase {
 
     @Override

@@ -32,9 +32,11 @@ import java.util.Map;
  */
 public class Main {
 
-    private static final String TAB =               "\t";
+    private static final String TAB = "\t";
+    private static final String DIR = ".";
 
     private static MigrationManager manager;
+    private static PropertyHandler  propertyHandler;
 
 
     /*
@@ -44,8 +46,9 @@ public class Main {
      */
 
     public static void main(String[] args) {
-        Map<String, String> options = parseParameters(args);
-        runCommand(options.get(Properties.COMMAND.propertyName), options);
+        Map<String, String> parameters = parseParameters(args);
+        Map<String, String> properties = parseProperties(DIR, parameters);
+        runCommand(parameters.get(Properties.COMMAND.propertyName), properties);
     }
 
     /*
@@ -179,6 +182,17 @@ public class Main {
         }
 
         return result;
+    }
+
+    static void createPropertyHandler(String dir, Map<String, String> properties) {
+        if (propertyHandler == null) {
+            propertyHandler = PropertyHandler.create(dir, properties);
+        }
+    }
+
+    static Map<String, String> parseProperties(String dir, Map<String, String> properties) {
+        createPropertyHandler(dir, properties);
+        return propertyHandler.getProperties();
     }
 
 }

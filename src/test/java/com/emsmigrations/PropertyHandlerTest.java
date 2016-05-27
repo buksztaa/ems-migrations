@@ -24,7 +24,6 @@
 package com.emsmigrations;
 
 import junit.framework.TestCase;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -54,7 +53,6 @@ public class PropertyHandlerTest extends TestCase {
     protected void tearDown() throws Exception {
     }
 
-    @Test
     public void testPropertiesFileOnly() {
         PropertyHandler handler = PropertyHandler.create(migrationsDir.getPath());
 
@@ -64,7 +62,6 @@ public class PropertyHandlerTest extends TestCase {
         assertNull(handler.getProperty("keyNull"));
     }
 
-    @Test
     public void testPropertiesMapOnly() {
         Map<String, String> properties = new HashMap();
         properties.put("key1", "value1");
@@ -80,7 +77,6 @@ public class PropertyHandlerTest extends TestCase {
         assertNull(handler.getProperty("keyNull"));
     }
 
-    @Test
     public void testNonExistingPropertyFile() {
         PropertyHandler handler = PropertyHandler.create("abrakadabra");
 
@@ -88,7 +84,6 @@ public class PropertyHandlerTest extends TestCase {
         assertFalse(handler.propertyFileExists);
     }
 
-    @Test
     public void testPropertiesFileAndPropertiesMap() {
         Map<String, String> properties = new HashMap();
         properties.put("key1", "value1");

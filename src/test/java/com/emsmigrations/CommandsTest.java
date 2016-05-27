@@ -23,11 +23,8 @@
  */
 package com.emsmigrations;
 
-import org.junit.Test;
-
 public class CommandsTest extends ExtendedTestCase{
 
-    @Test
     public void testContains() {
         assertTrue(Commands.contains("migrate"));
         assertFalse(Commands.contains("MIGRATE"));

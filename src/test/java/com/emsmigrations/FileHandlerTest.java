@@ -23,8 +23,6 @@
  */
 package com.emsmigrations;
 
-import org.junit.Test;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -66,13 +64,11 @@ public class FileHandlerTest extends ExtendedTestCase {
         migrationsDir.delete();
     }
 
-    @Test
     public void testCreateFoldersAfterInit() {
         assertTrue(upDir.exists() && upDir.isDirectory());
         assertTrue(downDir.exists() && downDir.isDirectory());
     }
 
-    @Test
     public void testCreateMigrationWithNoContentNoDescription() {
         try {
             fileHandler.createMigration(null, null, null);
@@ -87,7 +83,6 @@ public class FileHandlerTest extends ExtendedTestCase {
         assertTrue(downDir.listFiles()[0].getName().matches("00001_[0-9]{12}\\.down"));
     }
 
-    @Test
     public void testCreateMigrationWithContentAndDescription() {
         try {
             fileHandler.createMigration("UpContent", "DownContent", "TestMigration");
@@ -104,7 +99,6 @@ public class FileHandlerTest extends ExtendedTestCase {
         assertEquals(11, downDir.listFiles()[0].length());
     }
 
-    @Test
     public void testCreateMultipleMigrationsWithoutContentWithTitle() {
         try {
             fileHandler.createMigration(null, null, "Migration1");
@@ -125,7 +119,6 @@ public class FileHandlerTest extends ExtendedTestCase {
         assertEquals("00003_Migration3.down", downDir.listFiles()[2].getName());
     }
 
-    @Test
     public void testGetMigrationsUpSuccess() {
         try {
             setUpMigrations();
@@ -163,7 +156,6 @@ public class FileHandlerTest extends ExtendedTestCase {
         }
     }
 
-    @Test
     public void testGetMigrationsDownSuccess() {
         try {
             setUpMigrations();

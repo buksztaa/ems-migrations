@@ -23,8 +23,6 @@
  */
 package com.emsmigrations;
 
-import org.junit.Test;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.nio.file.Files;
@@ -49,17 +47,14 @@ public class EmsAdminHandlerTest extends ExtendedTestCase {
         }
     }
 
-    @Test
     public void testVerifyEmsBinFailure() {
         assertException(() -> EmsAdminHandler.create(EmsConnection.create(null, null, null, "nosuchfolder")));
     }
 
-    @Test
     public void testVerifyEmsBinSuccess() {
         assertNoException(() -> EmsAdminHandler.create(EmsConnection.create(null, null, null, ".")));
     }
 
-    @Test
     public void testExecuteSuccess() throws Exception {
 
         try(BufferedWriter writer = Files.newBufferedWriter(Paths.get("script.scr"))) {
@@ -72,7 +67,6 @@ public class EmsAdminHandlerTest extends ExtendedTestCase {
 
     }
 
-    @Test
     public void testExecuteFailure() throws Exception {
 
         try(BufferedWriter writer = Files.newBufferedWriter(Paths.get("script.scr"))) {

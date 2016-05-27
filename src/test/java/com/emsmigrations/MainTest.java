@@ -23,8 +23,6 @@
  */
 package com.emsmigrations;
 
-import org.junit.Test;
-
 import java.util.Map;
 
 public class MainTest extends ExtendedTestCase {
@@ -39,49 +37,41 @@ public class MainTest extends ExtendedTestCase {
 
     }
 
-    @Test
     public void testGetIntFromStringSuccess() {
         assertEquals(10, Main.getIntFromString("10"));
         assertEquals(10, Main.getIntFromString("010"));
     }
 
-    @Test
     public void testGetIntFromStringFailure() {
         assertEquals(-1, Main.getIntFromString("thisisnotanumber"));
         assertEquals(-1, Main.getIntFromString("1,4"));
         assertEquals(-1, Main.getIntFromString("12.345623"));
     }
 
-    @Test
     public void testNoParameters() {
         assertException(() -> Main.parseParameters(null));
     }
 
-    @Test
     public void testWrongNumberOfParameters() {
         String[] params = {};
         assertException(() -> Main.parseParameters(params));
     }
 
-    @Test
     public void testWrongCommand() {
         String[] params = {"thisonedoesntexist"};
         assertException(() -> Main.parseParameters(params));
     }
 
-    @Test
     public void testWrongFormatForOption() {
         String[] params = {"create", "wrongoption", "1"};
         assertException(() -> Main.parseParameters(params));
     }
 
-    @Test
     public void testWrongOption() {
         String[] params = {"create", "-nonexisting", "admin"};
         assertException(() -> Main.parseParameters(params));
     }
 
-    @Test
     public void testNoOptions() {
         String[] params = {"create"};
         Map<String, String> result = Main.parseParameters(params);
@@ -89,7 +79,6 @@ public class MainTest extends ExtendedTestCase {
         assertEquals(1, result.keySet().size());
     }
 
-    @Test
     public void testOneOption() {
         String[] params = {"create", "-user", "admin"};
         Map<String, String> result = Main.parseParameters(params);
@@ -97,7 +86,6 @@ public class MainTest extends ExtendedTestCase {
         assertEquals(2, result.keySet().size());
     }
 
-    @Test
     public void testMultipleOptions() {
         String[] params = {"create", "-user", "admin", "-url", "-desc", "Lorem ipsum"};
         Map<String, String> result = Main.parseParameters(params);

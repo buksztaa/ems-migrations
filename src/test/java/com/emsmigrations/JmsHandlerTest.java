@@ -23,8 +23,6 @@
  */
 package com.emsmigrations;
 
-import org.junit.Test;
-
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
@@ -48,8 +46,6 @@ public class JmsHandlerTest extends ExtendedTestCase {
         handler = JmsHandler.create(connection);
     }
 
-
-    @Test
     public void testSetAndGetVersion() {
 
         Random r = new Random();

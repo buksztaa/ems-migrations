@@ -23,11 +23,8 @@
  */
 package com.emsmigrations;
 
-import org.junit.Test;
-
 public class PropertiesTest extends ExtendedTestCase {
 
-    @Test
     public void testContains() {
         assertTrue(Properties.contains("url"));
         assertFalse(Properties.contains("URL"));

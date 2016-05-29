@@ -37,7 +37,7 @@ import java.util.Properties;
  */
 public class PropertyHandler {
 
-    public static final String PROPERTY_FILE = "ems-m.properties";
+    public static final String PROPERTY_FILE = "default.properties";
 
     public final String propertiesDir;
     public final boolean propertyFileExists;

@@ -24,27 +24,38 @@
 package com.emsmigrations;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
     This enumeration keeps all the commands the application accepts.
  */
 public enum Commands {
 
-    CREATE                  ("create"),
-    MIGRATE                 ("migrate"),
-    ROLLBACK                ("rollback"),
-    CHECK_VERSION           ("check-version"),
-    HELP                    ("help");
+    CREATE                  ("create",          true),
+    MIGRATE                 ("migrate",         true),
+    ROLLBACK                ("rollback",        true),
+    CHECK_VERSION           ("check-version",   true),
+    HELP                    ("help",            false);
 
     public final String commandName;
+    public final boolean requiresMigrationManager;
 
-    Commands(String commandName) {
+    private static final List<Commands> enumValues = Arrays.asList(values());
+
+    Commands(String commandName, boolean requiresMigrationManager) {
         this.commandName = commandName;
+        this.requiresMigrationManager = requiresMigrationManager;
     }
 
     public static boolean contains(String commandName) {
-        return Arrays.asList(Commands.values()).stream()
+        return enumValues.stream()
                 .anyMatch(c -> c.commandName.equals(commandName));
+    }
+
+    public static Commands findByName(String commandName) {
+        return enumValues.stream()
+                .filter(c -> c.commandName.equals(commandName))
+                .findFirst().get();
     }
 
 }

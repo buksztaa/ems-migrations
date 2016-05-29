@@ -32,8 +32,8 @@ import java.util.Map;
  */
 public class Main {
 
-    private static final String TAB = "\t";
-    private static final String DIR = ".";
+    private static final String TAB = "  ";
+    private static final String PROPS_DIR = "../conf";
 
     private static MigrationManager manager;
     private static PropertyHandler  propertyHandler;
@@ -47,8 +47,10 @@ public class Main {
 
     public static void main(String[] args) {
         Map<String, String> parameters = parseParameters(args);
-        Map<String, String> properties = parseProperties(DIR, parameters);
-        runCommand(parameters.get(Properties.COMMAND.propertyName), properties);
+        Map<String, String> properties = parseProperties(PROPS_DIR, parameters);
+
+        Commands command = Commands.findByName(parameters.get(Properties.COMMAND.propertyName));
+        runCommand(command, properties);
     }
 
     /*
@@ -85,24 +87,27 @@ public class Main {
         migMap.forEach((k, v) -> println(k + TAB + TAB + TAB + ":" + TAB + (v ? "OK" : "ERR")));
     }
 
-    static void runCommand(String command, Map<String, String> options) {
+    static void runCommand(Commands command, Map<String, String> options) {
 
         try {
             printHeader(options);
-            manager = createMigrationManager(options);
 
-            if (Commands.CREATE.commandName.equalsIgnoreCase(command)) {
+            if (command.requiresMigrationManager) {
+                manager = createMigrationManager(options);
+            }
+
+            if (Commands.CREATE.equals(command)) {
                 manager.createMigration(options.get(Properties.DESC.propertyName));
-            } else if (Commands.MIGRATE.commandName.equalsIgnoreCase(command)) {
+            } else if (Commands.MIGRATE.equals(command)) {
                 Map<String, Boolean> migMap = manager.migrate(getIntFromString(options.get(Properties.VER.propertyName)));
                 printMigrationSummary(migMap);
-            } else if (Commands.ROLLBACK.commandName.equalsIgnoreCase(command)) {
+            } else if (Commands.ROLLBACK.equals(command)) {
                 Map<String, Boolean> migMap = manager.rollback(getIntFromString(options.get(Properties.VER.propertyName)));
                 printMigrationSummary(migMap);
-            } else if (Commands.CHECK_VERSION.commandName.equalsIgnoreCase(command)) {
+            } else if (Commands.CHECK_VERSION.equals(command)) {
                 int version = manager.checkVersion();
                 printVersion(version);
-            } else if (Commands.HELP.commandName.equalsIgnoreCase(command)) {
+            } else if (Commands.HELP.equals(command)) {
                 help();
             } else {
                 help();
@@ -125,25 +130,22 @@ public class Main {
         println("Example: create description=new_users");
         println();
         println("Available commands:");
-        println();
-        println(TAB + "- " + Commands.CREATE.commandName + " - creates a new migration");
-        println(TAB + TAB + "Available options:");
-        println(TAB + TAB + TAB + "- " + Properties.DESC.propertyName + " - (optional) description of the migration. Cannot contain " +
+        println("- " + Commands.CREATE.commandName + ": creates a new migration");
+        println(TAB + "Available options:");
+        println(TAB + "- " + Properties.DESC.propertyName + " - (optional) description of the migration. Cannot contain " +
                 "white characters.");
-        println();
-        println(TAB + "- " + Commands.MIGRATE.commandName + " - migrates to a new version of configuration");
-        println(TAB + TAB + "Available options:");
-        println(TAB + TAB + TAB + "- " + Properties.VER.propertyName + " - (optional) version of the configuration the EMS server " +
-                "should be migrated to. If not provided, the servers configuration will be upgraded up to the most " +
-                "recent version of the migration script");
-        println();
-        println(TAB + "- " + Commands.ROLLBACK.commandName + " - rolls back to a previous version of configuration");
-        println(TAB + TAB + "Available options:");
-        println(TAB + TAB + TAB + "- " + Properties.VER.propertyName + " - (required) version of the configuration the EMS server " +
+        println("- " + Commands.MIGRATE.commandName + " - migrates to a new version of configuration");
+        println(TAB + "Available options:");
+        println(TAB + "- " + Properties.VER.propertyName + TAB + " - (optional) version of the configuration the EMS server ");
+        println(TAB + "should be migrated to. If not provided, the servers ");
+        println(TAB + "configuration will be upgraded up to the most ");
+        println(TAB + "recent version of the migration script");
+        println("- " + Commands.ROLLBACK.commandName + " - rolls back to a previous version of configuration");
+        println(TAB + "Available options:");
+        println(TAB + "- " + Properties.VER.propertyName + " - (required) version of the configuration the EMS server " +
                 "should be downgraded to.");
-        println();
-        println(TAB + "- " + Commands.CHECK_VERSION.commandName + " - checks migration version of connected EMS server");
-        println(TAB + "- " + Commands.HELP.commandName + " - prints this message");
+        println("- " + Commands.CHECK_VERSION.commandName + " - checks migration version of connected EMS server");
+        println("- " + Commands.HELP.commandName + " - prints this message");
         println();
         println("Available global options:");
         println(TAB + "- " + Properties.URL.propertyName + " - (optional) EMS server connection URL");

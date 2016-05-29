@@ -67,17 +67,17 @@ public class Main {
         System.out.println();
     }
 
-    static void printHeader(Map<String, String> args) {
+    static void printHeader(Commands command, Map<String, String> args) {
         println("EMS Migrations");
-        println("Running command: " + args.get(Properties.COMMAND.propertyName));
+        println("Running command: " + command.commandName);
     }
 
     static void printVersion(int version) {
         println("Server version: " + version);
     }
 
-    static void printError(String content) {
-        println("ERROR: " + content);
+    static void printError(Exception e) {
+        e.printStackTrace();
     }
 
     static void printMigrationSummary(Map<String, Boolean> migMap) {
@@ -90,7 +90,7 @@ public class Main {
     static void runCommand(Commands command, Map<String, String> options) {
 
         try {
-            printHeader(options);
+            printHeader(command, options);
 
             if (command.requiresMigrationManager) {
                 manager = createMigrationManager(options);
@@ -113,7 +113,7 @@ public class Main {
                 help();
             }
         } catch (Exception e) {
-            printError(e.getMessage());
+            printError(e);
         }
     }
 

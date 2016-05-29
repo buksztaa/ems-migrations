@@ -41,9 +41,9 @@ public abstract class AbstractMigrationManager implements MigrationManager {
 
     protected AbstractMigrationManager(EmsConnection connection) throws MigrationException{
         addConnection(connection);
-        setActiveConnection(connection.name);
         this.emsAdminHandler = EmsAdminHandler.create(connection);
         this.jmsHandler = JmsHandler.create(connection);
+        setActiveConnection(connection.name);
     }
 
     /*

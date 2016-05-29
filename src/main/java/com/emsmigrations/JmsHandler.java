@@ -90,17 +90,22 @@ public class JmsHandler implements Utils{
     }
 
     public void openConnection() throws MigrationException{
-        try {
-            ConnectionFactory factory = new com.tibco.tibjms.TibjmsConnectionFactory(connection.url);
-            conn = factory.createConnection(connection.user, connection.password);
-        } catch (JMSException e) {
-            throw new MigrationException("could not create Connection", e);
+        if (conn == null) {
+            try {
+                ConnectionFactory factory = new com.tibco.tibjms.TibjmsConnectionFactory(connection.url);
+                conn = factory.createConnection(connection.user, connection.password);
+            } catch (JMSException e) {
+                throw new MigrationException("could not create Connection", e);
+            }
         }
     }
 
     public void closeConnection() throws MigrationException {
         try {
-            conn.close();
+            if (conn != null) {
+                conn.close();
+                conn = null;
+            }
         } catch (JMSException e) {
             throw new MigrationException("Could not close connection", e);
         }
@@ -119,7 +124,7 @@ public class JmsHandler implements Utils{
 
     private int executeEmsOperation(EmsOperation operation) throws MigrationException {
 
-        if (connection == null) {
+        if (conn == null) {
             throw new MigrationException("Connection not initialized");
         }
 

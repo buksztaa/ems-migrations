@@ -35,7 +35,7 @@ public enum Properties {
 
     DIR             ("dir",         null,                                                   "Migrations root directory"),
     EMSHOME         ("emshome",     null,                                                   "EMS local installation home directory"),
-    URL             ("url",         null,                                                   "EMS connection url"),
+    URL             ("url",         "tcp://localhost:7222",                                 "EMS connection url"),
     USER            ("user",        "admin",                                                "EMS connection username"),
     PW              ("pw",          "",                                                     "EMS connection password"),
     VER             ("ver",         null,                                                   "Migration version"),

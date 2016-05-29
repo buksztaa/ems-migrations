@@ -68,20 +68,26 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
     @Override
     public Map<String, Boolean> migrate(int version) throws MigrationException{
         Map<String, Boolean> result = new HashMap();
-        int remoteVersion = jmsHandler.getVersion();
 
-        if (remoteVersion >= version) {
-            throw new MigrationException("Server is already the same or higher version (" + remoteVersion + ").");
+        try {
+            jmsHandler.openConnection();
+            int remoteVersion = jmsHandler.getVersion();
+
+            if (remoteVersion >= version) {
+                throw new MigrationException("Server is already the same or higher version (" + remoteVersion + ").");
+            }
+
+            List<String> migrations = fileHandler.getMigrationsUp(remoteVersion + 1, version);
+
+
+            for (String m : migrations) {
+                result.put(new File(m).getName(), emsAdminHandler.execute(m, null));
+            }
+
+            jmsHandler.setVersion(version);
+        } finally {
+            jmsHandler.closeConnection();
         }
-
-        List<String> migrations = fileHandler.getMigrationsUp(remoteVersion + 1, version);
-
-
-        for (String m : migrations) {
-            result.put(new File(m).getName(), emsAdminHandler.execute(m, null));
-        }
-
-        jmsHandler.setVersion(version);
 
         return result;
     }
@@ -89,26 +95,38 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
     @Override
     public Map<String, Boolean> rollback(int version) throws MigrationException{
         Map<String, Boolean> result = new HashMap();
-        int remoteVersion = jmsHandler.getVersion();
 
-        if (remoteVersion <= version) {
-            throw new MigrationException(("Server is already the same or lower version" + remoteVersion + ")."));
+        try {
+            jmsHandler.openConnection();
+            int remoteVersion = jmsHandler.getVersion();
+
+            if (remoteVersion <= version) {
+                throw new MigrationException(("Server is already the same or lower version" + remoteVersion + ")."));
+            }
+
+            List<String> migrations = fileHandler.getMigrationsDown(version + 1, remoteVersion);
+
+            for (String m : migrations) {
+                result.put(new File(m).getPath(), emsAdminHandler.execute(m, null));
+            }
+
+            jmsHandler.setVersion(version);
+        } finally {
+            jmsHandler.closeConnection();
         }
-
-        List<String> migrations = fileHandler.getMigrationsDown(version + 1, remoteVersion);
-
-        for (String m : migrations) {
-            result.put(new File(m).getPath(), emsAdminHandler.execute(m, null));
-        }
-
-        jmsHandler.setVersion(version);
-
         return result;
     }
 
     @Override
     public int checkVersion() throws MigrationException{
-        return jmsHandler.getVersion();
+        int version;
+        try {
+            jmsHandler.openConnection();
+            version = jmsHandler.getVersion();
+        } finally {
+            jmsHandler.closeConnection();
+        }
+        return version;
     }
 
     /*

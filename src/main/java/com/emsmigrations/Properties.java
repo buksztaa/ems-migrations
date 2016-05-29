@@ -24,6 +24,8 @@
 package com.emsmigrations;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
     This enumeration contains all the options available for the application interface to be set. They are used across
@@ -42,11 +44,14 @@ public enum Properties {
     COMMAND         ("command",     null,                                                   "Application command"),
     CONFACTORY      ("confactory",  "QueueConnectionFactory",                               "EMS connection factory object"),
     QUEUE           ("queue",       "q.ems-migrations.server.version",                      "EMS migration queue"),
-    CTXFACTORY      ("ctxfactory",  "com.tibco.tibjms.naming.TibjmsInitialContextFactory",  "Initial context factory class");
+    CTXFACTORY      ("ctxfactory",  "com.tibco.tibjms.naming.TibjmsInitialContextFactory",  "Initial context factory class"),
+    CONF            ("conf",        "default",                                              "Configuration file to be used");
 
     public final String propertyName;
     public final String propertyDescription;
     public final String defaultValue;
+
+    public static final List<Properties> enumerations = Arrays.asList(Properties.values());
 
 
     Properties(String propertyName, String defaultValue, String propertyDescription) {
@@ -56,9 +61,20 @@ public enum Properties {
     }
 
     public static boolean contains(String propertyName) {
-        return Arrays.asList(Properties.values()).stream()
+        return enumerations.stream()
                 .anyMatch(p -> p.propertyName.equals(propertyName));
     }
+
+    public static String getPropertyFromMap(Properties property, Map<String, String> map) {
+        String value = map.get(property.propertyName);
+
+        if (value == null && property.defaultValue != null) {
+            value = property.defaultValue;
+        }
+
+        return value;
+    }
+
 
 
 }

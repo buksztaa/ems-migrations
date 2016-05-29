@@ -23,6 +23,9 @@
  */
 package com.emsmigrations;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PropertiesTest extends ExtendedTestCase {
 
     public void testContains() {
@@ -30,5 +33,21 @@ public class PropertiesTest extends ExtendedTestCase {
         assertFalse(Properties.contains("URL"));
         assertFalse(Properties.contains(null));
         assertFalse(Properties.contains("nonexisting"));
+    }
+
+    public void testGetFromMap() {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("one", "one");
+        map.put("two", "two");
+        assertEquals(Properties.CONF.defaultValue, Properties.getPropertyFromMap(Properties.CONF, map));
+        assertNull(Properties.getPropertyFromMap(Properties.COMMAND, map));
+
+        map.put(Properties.COMMAND.propertyName, "help");
+        map.put(Properties.CONF.propertyName, "development");
+
+        assertEquals("help", Properties.getPropertyFromMap(Properties.COMMAND, map));
+        assertEquals("development", Properties.getPropertyFromMap(Properties.CONF, map));
+
     }
 }

@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 public class PropertyHandlerTest extends TestCase {
 
@@ -41,12 +40,12 @@ public class PropertyHandlerTest extends TestCase {
         if (migrationsDir.exists()) throw new Exception("Could not delete " + migrationsDir.getAbsolutePath() + ". Consider cleaning the project first.");
         migrationsDir.mkdir();
 
-        Properties properties = new Properties();
+        java.util.Properties properties = new java.util.Properties();
         properties.setProperty("key1", "value1");
         properties.setProperty("key2", "value2");
         properties.setProperty("key3", "value3");
 
-        properties.store(new FileWriter(new File(migrationsDir, PropertyHandler.PROPERTY_FILE)), null);
+        properties.store(new FileWriter(new File(migrationsDir, Properties.CONF.defaultValue +  PropertyHandler.PROPERTY_EXT)), null);
     }
 
     @Override

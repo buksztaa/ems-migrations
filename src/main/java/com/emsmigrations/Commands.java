@@ -40,7 +40,7 @@ public enum Commands {
     public final String commandName;
     public final boolean requiresMigrationManager;
 
-    private static final List<Commands> enumValues = Arrays.asList(values());
+    private static final List<Commands> enumerations = Arrays.asList(values());
 
     Commands(String commandName, boolean requiresMigrationManager) {
         this.commandName = commandName;
@@ -48,12 +48,12 @@ public enum Commands {
     }
 
     public static boolean contains(String commandName) {
-        return enumValues.stream()
+        return enumerations.stream()
                 .anyMatch(c -> c.commandName.equals(commandName));
     }
 
     public static Commands findByName(String commandName) {
-        return enumValues.stream()
+        return enumerations.stream()
                 .filter(c -> c.commandName.equals(commandName))
                 .findFirst().get();
     }

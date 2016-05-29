@@ -30,14 +30,13 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * Handles retrieval of properties.
  */
 public class PropertyHandler {
 
-    public static final String PROPERTY_FILE = "default.properties";
+    public static final String PROPERTY_EXT = ".properties";
 
     public final String propertiesDir;
     public final boolean propertyFileExists;
@@ -46,11 +45,13 @@ public class PropertyHandler {
     private final Map<String, String> properties;
 
     private PropertyHandler(String propertiesDir, Map<String, String> properties) {
+        String fileBase = Properties.getPropertyFromMap(Properties.CONF, properties);
+
         this.propertiesDir = propertiesDir;
-        this.propertiesFile = new File(propertiesDir, PROPERTY_FILE);
+        this.propertiesFile = new File(propertiesDir, fileBase + PROPERTY_EXT);
         this.propertyFileExists = propertiesFile.exists() && propertiesFile.isFile();
 
-        Properties fileProperties = loadProperties(propertiesFile);
+        java.util.Properties fileProperties = loadProperties(propertiesFile);
         this.properties = mergeProperties(fileProperties, properties);
     }
 
@@ -86,8 +87,8 @@ public class PropertyHandler {
     --------------------------------------------------------------------------------------------------------------------
      */
 
-    private Properties loadProperties(File propertiesFile) {
-        Properties result = new Properties();
+    private java.util.Properties loadProperties(File propertiesFile) {
+        java.util.Properties result = new java.util.Properties();
         try {
             result.load(new FileReader(propertiesFile));
         } catch (IOException e) {}
@@ -95,7 +96,7 @@ public class PropertyHandler {
         return result;
     }
 
-    private Map<String, String> mergeProperties(Properties fileProperties, Map<String, String> properties) {
+    private Map<String, String> mergeProperties(java.util.Properties fileProperties, Map<String, String> properties) {
         Map<String, String> result = new HashMap();
         fileProperties.keySet().forEach(k -> result.put("" + k, fileProperties.getProperty((String)k)));
         result.putAll(properties);

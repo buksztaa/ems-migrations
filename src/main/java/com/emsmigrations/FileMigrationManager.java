@@ -69,11 +69,15 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
     public Map<String, Boolean> migrate(int version) throws MigrationException{
         Map<String, Boolean> result = new HashMap();
 
+        if (version < 0 ) {
+            version = fileHandler.getLatestMigrationNumber();
+        }
+
         try {
             jmsHandler.openConnection();
             int remoteVersion = jmsHandler.getVersion();
 
-            if (remoteVersion >= version) {
+            if (remoteVersion > 0 && remoteVersion >= version) {
                 throw new MigrationException("Server is already the same or higher version (" + remoteVersion + ").");
             }
 
@@ -96,12 +100,16 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
     public Map<String, Boolean> rollback(int version) throws MigrationException{
         Map<String, Boolean> result = new HashMap();
 
+        if (version < 0) {
+            throw new MigrationException("Version not provided");
+        }
+
         try {
             jmsHandler.openConnection();
             int remoteVersion = jmsHandler.getVersion();
 
             if (remoteVersion <= version) {
-                throw new MigrationException(("Server is already the same or lower version" + remoteVersion + ")."));
+                throw new MigrationException(("Server is already the same or lower version (" + remoteVersion + ")."));
             }
 
             List<String> migrations = fileHandler.getMigrationsDown(version + 1, remoteVersion);

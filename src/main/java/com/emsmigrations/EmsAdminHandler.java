@@ -144,8 +144,12 @@ public class EmsAdminHandler implements Utils{
         sb.append(commandOption(OPT_SCRIPT, script));
         sb.append(commandOption(OPT_SERVER, serverUrl));
         sb.append(commandOption(OPT_USER, user));
-        sb.append(commandOption(OPT_PASSWORD, password));
-        options.forEach((k, v) -> sb.append(commandOption(k, v)));
+        if (password != null && password.trim().length() > 0) {
+            sb.append(commandOption(OPT_PASSWORD, password));
+        }
+        if (options != null) {
+            options.forEach((k, v) -> sb.append(commandOption(k, v)));
+        }
 
         return sb.toString();
     }

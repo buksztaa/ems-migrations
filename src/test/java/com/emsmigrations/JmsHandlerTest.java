@@ -47,7 +47,6 @@ public class JmsHandlerTest extends ExtendedTestCase {
     }
 
     public void testSetAndGetVersion() {
-
         Random r = new Random();
         int v = r.nextInt(1000);
         final int[] version = new int[1];
@@ -62,7 +61,29 @@ public class JmsHandlerTest extends ExtendedTestCase {
         });
 
         assertEquals(v, version[0]);
+    }
 
+    public void testSetAndGetInitialVersion() {
+        final int[] version = new int[2];
+        assertNoException(() -> {
+            handler.openConnection();
+            handler.setVersion(0);
+            handler.closeConnection();
 
+            handler.openConnection();
+            version[0] = handler.getVersion();
+            handler.closeConnection();
+
+            handler.openConnection();
+            handler.setVersion(1);
+            handler.closeConnection();
+
+            handler.openConnection();
+            version[1] = handler.getVersion();
+            handler.closeConnection();
+        });
+
+        assertEquals(0, version[0]);
+        assertEquals(1, version[1]);
     }
 }

@@ -24,8 +24,10 @@
 
 package com.emsmigrations;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * Application main class.
@@ -37,6 +39,7 @@ public class Main {
 
     private static MigrationManager manager;
     private static PropertyHandler  propertyHandler;
+    private static Printer          printer = Printer.get();
 
 
     /*
@@ -67,9 +70,10 @@ public class Main {
         System.out.println();
     }
 
-    static void printHeader(Commands command, Map<String, String> args) {
-        println("EMS Migrations");
-        println("Running command: " + command.commandName);
+    static void printHeader(Commands command, Map<String, String> args) throws MigrationException{
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("command", command.commandName);
+        printer.printHeader("application", parameters);
     }
 
     static void printVersion(int version) {
@@ -85,6 +89,10 @@ public class Main {
         println("Migrations executed " + ((failed) ? "WITH ERRORS" : "with no errors"));
         println();
         migMap.forEach((k, v) -> println(k + TAB + TAB + TAB + ":" + TAB + (v ? "OK" : "ERR")));
+    }
+
+    static void printHelp() throws MigrationException {
+        printer.printCommand(Commands.HELP, Collections.EMPTY_MAP);
     }
 
     static void runCommand(Commands command, Map<String, String> options) {
@@ -108,9 +116,9 @@ public class Main {
                 int version = manager.checkVersion();
                 printVersion(version);
             } else if (Commands.HELP.equals(command)) {
-                help();
+                printHelp();
             } else {
-                help();
+                printHelp();
             }
         } catch (Exception e) {
             printError(e);
@@ -124,35 +132,6 @@ public class Main {
             return -1;
         }
     }
-
-    static void help() {
-        println("Usage: <command> <option=value>...");
-        println("Example: create description=new_users");
-        println();
-        println("Available commands:");
-        println("- " + Commands.CREATE.commandName + ": creates a new migration");
-        println(TAB + "Available options:");
-        println(TAB + "- " + Properties.DESC.propertyName + " - (optional) description of the migration. Cannot contain " +
-                "white characters.");
-        println("- " + Commands.MIGRATE.commandName + " - migrates to a new version of configuration");
-        println(TAB + "Available options:");
-        println(TAB + "- " + Properties.VER.propertyName + TAB + " - (optional) version of the configuration the EMS server ");
-        println(TAB + "should be migrated to. If not provided, the servers ");
-        println(TAB + "configuration will be upgraded up to the most ");
-        println(TAB + "recent version of the migration script");
-        println("- " + Commands.ROLLBACK.commandName + " - rolls back to a previous version of configuration");
-        println(TAB + "Available options:");
-        println(TAB + "- " + Properties.VER.propertyName + " - (required) version of the configuration the EMS server " +
-                "should be downgraded to.");
-        println("- " + Commands.CHECK_VERSION.commandName + " - checks migration version of connected EMS server");
-        println("- " + Commands.HELP.commandName + " - prints this message");
-        println();
-        println("Available global options:");
-        println(TAB + "- " + Properties.URL.propertyName + " - (optional) EMS server connection URL");
-        println(TAB + "- " + Properties.USER.propertyName + " - (optional) EMS server connection user");
-        println(TAB + "- " + Properties.PW.propertyName + " - (optional) EMS server connection password");
-    }
-
 
     static MigrationManager createMigrationManager(Map<String, String> options) throws MigrationException {
         String type = options.get(Properties.TYPE.propertyName);

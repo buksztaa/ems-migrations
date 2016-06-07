@@ -1,0 +1,39 @@
+Usage:      <command> <option=value>...
+Example:    create description=new_users
+
+Available commands (with options):
+---------------------------------------------------------------------------------------------
+create          |           |   creates new migration.
+                |   -desc   |   (optional) description of the migration. Cannot contain white
+                |           |   characters
+---------------------------------------------------------------------------------------------
+migrate         |           |   migrates to a new version of configuration
+                |   -ver    |   (optional) version of the configuration the EMS server
+                |           |   should be migrated to. If not provided, the servers
+                |           |   configuration will be upgraded up to the most
+                |           |   recent version of the migration script
+---------------------------------------------------------------------------------------------
+rollback        |           |   rolls back to a previous version of configuration.
+                |   -ver    |   (required) version of the configuration the EMS server should
+                |           |   be downgraded to
+---------------------------------------------------------------------------------------------
+check-version   |           |   checks migration version of connected EMS server
+---------------------------------------------------------------------------------------------
+help            |           |   prints this message
+---------------------------------------------------------------------------------------------
+
+Available global options:
+---------------------------------------------------------------------------------------------
+-conf           |   Configuration profile. Is in fact a name of the property file used to
+                |   configure the migration execution. Default: default
+-confactory     |   EMS connection factory object. Default: QueueConnectionFactory
+-ctxfactory     |   Initial context factory class. Default:
+                |   com.tibco.tibjms.naming.TibjmsInitialContextFactory
+-dir            |   Migrations root directory
+-emshome        |   EMS local installation home directory"
+-pw             |   EMS server connection password
+-queue          |   EMS migration queue. Default: q.ems-migrations.server.version
+-type           |   Migrations type. Default: file
+-url            |   EMS server connection URL
+-user           |   EMS server connection user
+---------------------------------------------------------------------------------------------

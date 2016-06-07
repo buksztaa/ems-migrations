@@ -5,16 +5,16 @@
 Ems-migrations is an attempt to organize and structure scripts TIBCO EMS is updated with. The approach is based on various implementations of well-known various database migrations.
 The concept is:
 
-*   A migration is a script that does ammendments to the configuration of EMS. The script is in fact what you would run TIBEMSADMIN with.
-*   Each migration consists of two parts: up and down - to migrate changes and roll them back. You need to write both of them.
+*   A migration is a script that does ammendments to the configuration of EMS. The script is in fact what you would run **tibemsadmin** with.
+*   Each migration consists of two parts: **up** and **down** - to migrate changes and roll them back. You need to write both of them.
 *   The library migrates the server it connects to by running a series of scripts up (or down for rollback) to a version you specify. If not specified the version, the server will be migrated to the newest version.
 *   The library knows what is the version the server was migrated with the last time by reading a message from a designated queue. After successful migration it stores a new message containing the updated migration version number.
 
 ##  Installation
 
-**1.**  Download the latest stable package from here: `[link]`.
-**2.**  Unpack the archive.
-**3.**  Copy *tibjms.jar* and *jms-2.0.jar* from your `<EMS_HOME>/lib` to the lib directory of newly extracted directory.
+**1.**  Download the latest stable package from here: `[link]`.  
+**2.**  Unpack the archive.  
+**3.**  Copy *tibjms.jar* and *jms-2.0.jar* from your `<EMS_HOME>/lib` to the lib directory of newly extracted directory.  
   
 ##  Usage  
 

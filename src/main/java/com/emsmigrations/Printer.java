@@ -44,7 +44,7 @@ public class Printer {
         }
 
         public String getFilename(String object) {
-            return prefix + object + suffix;
+            return "/printer/" + prefix + object + suffix;
         }
     }
 
@@ -89,13 +89,14 @@ public class Printer {
      */
 
     private void printFile(String filename, Map<String, String> parameters) throws MigrationException {
-        File file = new File(filename);
 
-        if (!file.exists()) {
+        InputStream stream = getClass().getResourceAsStream(filename);
+
+        if (stream == null) {
             throw new MigrationException("Cannot find a resource file: " + filename);
         }
 
-        try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String processedLine = replaceTokensInLine(line, parameters);
@@ -114,7 +115,7 @@ public class Printer {
     private String replaceTokensInLine(String line, Map<String, String> parameters) {
         return parameters.keySet().stream()
                 .filter(key -> lineContainsToken(line, key))
-                .reduce("", (newLine, key) -> replaceTokenInLine(newLine, key, parameters));
+                .reduce(line, (newLine, key) -> replaceTokenInLine(line, key, parameters));
 
     }
 
@@ -123,7 +124,7 @@ public class Printer {
     }
 
     private String replaceTokenInLine(String line, String key, Map<String, String> parameters) {
-        return line.replaceAll("\\$\\{}" + key + "\\}", parameters.get(key));
+        return line.replaceAll("\\$\\{" + key + "\\}", parameters.get(key));
     }
 
 }

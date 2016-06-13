@@ -1,0 +1,7 @@
+Finished executing migrations.
+
+Successful (${succCount}):
+${failed}
+
+Failed (${failCount}):
+${success}

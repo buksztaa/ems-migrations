@@ -137,6 +137,14 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
         return version;
     }
 
+    public String getLastUpFilePath() {
+        return fileHandler.getLastUpFilePath();
+    }
+
+    public String getLastDownFilePath() {
+        return fileHandler.getLastDownFilePath();
+    }
+
     /*
     --------------------------------------------------------------------------------------------------------------------
         PRIVATE SECTION

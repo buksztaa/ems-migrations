@@ -27,7 +27,6 @@ package com.emsmigrations;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringJoiner;
 
 /**
  * Application main class.
@@ -37,9 +36,9 @@ public class Main {
     private static final String TAB = "  ";
     private static final String PROPS_DIR = "../conf";
 
-    private static MigrationManager manager;
-    private static PropertyHandler  propertyHandler;
-    private static Printer          printer = Printer.get();
+    private static FileMigrationManager manager;
+    private static PropertyHandler      propertyHandler;
+    private static Printer              printer = Printer.get();
 
 
     /*
@@ -95,6 +94,13 @@ public class Main {
         printer.printCommand(Commands.HELP, Collections.EMPTY_MAP);
     }
 
+    static void printCreate() throws MigrationException {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("upFilePath", manager.getLastUpFilePath());
+        parameters.put("downFilePath", manager.getLastDownFilePath());
+        printer.printCommand(Commands.CREATE, parameters);
+    }
+
     static void runCommand(Commands command, Map<String, String> options) {
 
         try {
@@ -133,10 +139,10 @@ public class Main {
         }
     }
 
-    static MigrationManager createMigrationManager(Map<String, String> options) throws MigrationException {
+    static FileMigrationManager createMigrationManager(Map<String, String> options) throws MigrationException {
         String type = options.get(Properties.TYPE.propertyName);
         String paramType = (type == null)? MigrationManagerFactory.DEFAULT : type;
-        MigrationManager manager = MigrationManagerFactory.createMigrationManager(paramType, options);
+        FileMigrationManager manager = (FileMigrationManager)MigrationManagerFactory.createMigrationManager(paramType, options);
 
         return manager;
     }

@@ -70,6 +70,8 @@ public class FileHandler {
     public final String migrationsDir;
 
     private final File rootDir;
+    private String lastUpFilePath;
+    private String lastDownFilePath;
 
     private FileHandler(String migrationsDir) {
         this.migrationsDir = migrationsDir;
@@ -122,6 +124,13 @@ public class FileHandler {
         return getMigrationsDown(from, getLatestMigrationNumber());
     }
 
+    public String getLastUpFilePath() {
+        return lastUpFilePath;
+    }
+
+    public String getLastDownFilePath() {
+        return lastDownFilePath;
+    }
 
     /*
     --------------------------------------------------------------------------------------------------------------------
@@ -171,6 +180,7 @@ public class FileHandler {
         } catch (IOException e){
             upFile.delete();
         }
+        lastUpFilePath = upFile.getPath();
 
         final File downFile = new File(Direction.DOWN.getDir(rootDir), fileName + "." + Direction.DOWN.value);
         try (BufferedWriter w = Files.newBufferedWriter(Paths.get(downFile.getPath()))) {
@@ -179,6 +189,7 @@ public class FileHandler {
             upFile.delete();
             downFile.delete();
         }
+        lastDownFilePath = downFile.getPath();
     }
 
     private List<String> getMigrations(int from, int to, Direction direction) {

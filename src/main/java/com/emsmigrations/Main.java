@@ -112,6 +112,7 @@ public class Main {
 
             if (Commands.CREATE.equals(command)) {
                 manager.createMigration(options.get(Properties.DESC.propertyName));
+                printCreate();
             } else if (Commands.MIGRATE.equals(command)) {
                 Map<String, Boolean> migMap = manager.migrate(getIntFromString(options.get(Properties.VER.propertyName)));
                 printMigrationSummary(migMap);

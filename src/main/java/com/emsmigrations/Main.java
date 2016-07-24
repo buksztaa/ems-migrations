@@ -61,33 +61,14 @@ public class Main {
     --------------------------------------------------------------------------------------------------------------------
      */
 
-    static void println(String content) {
-        System.out.println(content);
-    }
-
-    static void println() {
-        System.out.println();
-    }
-
     static void printHeader(Commands command, Map<String, String> args) throws MigrationException{
         Map<String, String> parameters = new HashMap<>();
         parameters.put("command", command.commandName);
         printer.printHeader("application", parameters);
     }
 
-    static void printVersion(int version) {
-        println("Server version: " + version);
-    }
-
     static void printError(Exception e) {
         e.printStackTrace();
-    }
-
-    static void printMigrationSummary(Map<String, Boolean> migMap) {
-        boolean failed = migMap.values().contains(Boolean.FALSE);
-        println("Migrations executed " + ((failed) ? "WITH ERRORS" : "with no errors"));
-        println();
-        migMap.forEach((k, v) -> println(k + TAB + TAB + TAB + ":" + TAB + (v ? "OK" : "ERR")));
     }
 
     static void printHelp() throws MigrationException {
@@ -99,6 +80,22 @@ public class Main {
         parameters.put("upFilePath", manager.getLastUpFilePath());
         parameters.put("downFilePath", manager.getLastDownFilePath());
         printer.printCommand(Commands.CREATE, parameters);
+    }
+
+    static void printCheckVersion(int version) throws MigrationException {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("version", String.valueOf(version));
+        printer.printCommand(Commands.CHECK_VERSION, parameters);
+    }
+
+    static void printMigrate(Map<String, Boolean> results) throws MigrationException{
+        int total = results.size();
+        long failed = results.values().stream().filter(v -> v == false).count();
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("total", String.valueOf(total));
+        parameters.put("failed", String.valueOf(String.valueOf(failed)));
+        results.keySet().forEach((k) -> printer.addLine(k + " : " + (results.get(k)? "OK" : "FAILED")));
+        printer.printCommand(Commands.MIGRATE, parameters);
     }
 
     static void runCommand(Commands command, Map<String, String> options) {
@@ -115,13 +112,13 @@ public class Main {
                 printCreate();
             } else if (Commands.MIGRATE.equals(command)) {
                 Map<String, Boolean> migMap = manager.migrate(getIntFromString(options.get(Properties.VER.propertyName)));
-                printMigrationSummary(migMap);
+                printMigrate(migMap);
             } else if (Commands.ROLLBACK.equals(command)) {
                 Map<String, Boolean> migMap = manager.rollback(getIntFromString(options.get(Properties.VER.propertyName)));
-                printMigrationSummary(migMap);
+                printMigrate(migMap);
             } else if (Commands.CHECK_VERSION.equals(command)) {
                 int version = manager.checkVersion();
-                printVersion(version);
+                printCheckVersion(version);
             } else if (Commands.HELP.equals(command)) {
                 printHelp();
             } else {

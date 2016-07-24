@@ -1,0 +1,6 @@
+Finished executing rollbacks.
+
+Total:  ${total}
+Failed: ${failed}
+
+${lines}

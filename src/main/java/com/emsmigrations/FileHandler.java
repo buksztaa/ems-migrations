@@ -37,6 +37,9 @@ import java.util.*;
  */
 public class FileHandler {
 
+    static final String POST_MIGRATION_FILENAME = "post";
+    static final String PRE_MIGRATION_FILENAME = "pre";
+
     public enum Direction {
 
         UP("up"),
@@ -193,20 +196,41 @@ public class FileHandler {
     }
 
     private List<String> getMigrations(int from, int to, Direction direction) {
-        List<String> result = new ArrayList();
+        List<String> migrations = new ArrayList();
+
+        String preMigration = getPreMigration(direction);
+        String postMigration = getPostMigration(direction);
 
         File[] migrationFiles = direction.getDir(rootDir).listFiles((f, n) -> n.matches("^[0-9]{5}_.+\\." + direction.value));
         Arrays.asList(migrationFiles).forEach(mf -> {
             int migrationVersion = Integer.parseInt(mf.getName().substring(0, 5));
             if (migrationVersion >= Integer.min(from, to) && migrationVersion <= Integer.max(from, to)) {
-                result.add(mf.getAbsolutePath());
+                migrations.add(mf.getAbsolutePath());
             }
         });
 
-        direction.sort(result);
+        direction.sort(migrations);
 
-        return result;
+        if (preMigration != null) {
+            migrations.add(0, preMigration);
+        }
+
+        if (postMigration != null) {
+            migrations.add(postMigration);
+        }
+
+
+        return migrations;
     }
 
+    private String getPreMigration(Direction direction) {
+        File preMigrationFile = new File(migrationsDir, PRE_MIGRATION_FILENAME + "." + direction.value);
+        return (preMigrationFile.exists() && preMigrationFile.isFile())? preMigrationFile.getAbsolutePath() : null;
+    }
+
+    private String getPostMigration(Direction direction) {
+        File postMigrationFile = new File(migrationsDir, POST_MIGRATION_FILENAME + "." + direction.value);
+        return (postMigrationFile.exists() && postMigrationFile.isFile())? postMigrationFile.getAbsolutePath() : null;
+    }
 
 }

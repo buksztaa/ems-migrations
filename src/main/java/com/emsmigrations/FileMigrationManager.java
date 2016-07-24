@@ -26,6 +26,7 @@ package com.emsmigrations;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +68,7 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
 
     @Override
     public Map<String, Boolean> migrate(int version) throws MigrationException{
-        Map<String, Boolean> result = new HashMap();
+        Map<String, Boolean> result = new LinkedHashMap<>();
 
         if (version < 0 ) {
             version = fileHandler.getLatestMigrationNumber();
@@ -98,7 +99,7 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
 
     @Override
     public Map<String, Boolean> rollback(int version) throws MigrationException{
-        Map<String, Boolean> result = new HashMap();
+        Map<String, Boolean> result = new LinkedHashMap<>();
 
         if (version < 0) {
             throw new MigrationException("Version not provided");

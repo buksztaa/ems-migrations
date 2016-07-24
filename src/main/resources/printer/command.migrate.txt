@@ -1,7 +1,6 @@
 Finished executing migrations.
 
-Successful (${succCount}):
-${failed}
+Total:  ${total}
+Failed: ${failed}
 
-Failed (${failCount}):
-${success}
+${lines}

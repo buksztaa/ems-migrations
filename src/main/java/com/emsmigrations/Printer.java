@@ -24,7 +24,7 @@
 package com.emsmigrations;
 
 import java.io.*;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This utility class assembles the formatted content to be printed for each command and property
@@ -47,6 +47,8 @@ public class Printer {
             return "/printer/" + prefix + object + suffix;
         }
     }
+
+    private final LinkedList<String> lines = new LinkedList<>();
 
     private static Printer instance;
 
@@ -81,6 +83,12 @@ public class Printer {
         printFile(filename, parameters);
     }
 
+    public void addLine(String line) {
+        if (line != null) {
+            lines.add(line);
+        }
+    }
+
 
     /*
     --------------------------------------------------------------------------------------------------------------------
@@ -99,8 +107,14 @@ public class Printer {
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String processedLine = replaceTokensInLine(line, parameters);
-                printLine(processedLine);
+                if (lineContainsToken(line, "lines")) {
+                    while (!lines.isEmpty()) {
+                        printLine(lines.removeFirst());
+                    }
+                } else {
+                    String processedLine = replaceTokensInLine(line, parameters);
+                    printLine(processedLine);
+                }
             }
 
         } catch (Exception e) {

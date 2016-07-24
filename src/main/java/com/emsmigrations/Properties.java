@@ -1,5 +1,5 @@
 /*
-    The MIT License (MIT)
+    The MIT License (MIT) Adam Buksztaler
 
     Copyright (c) 2016
 

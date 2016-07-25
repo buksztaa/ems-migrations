@@ -76,7 +76,9 @@ All configuration properties are enlisted below:
 | queue             | EMS migration queue                                                           |           | q.ems-migrations.server.version                       |
 | ctxfactory        | Initial context factory class                                                 |           | com.tibco.tibjms.naming.TibjmsInitialContextFactory   |
 
+### Pre and post scripts
 
+Migrate rollback commands can have pre-execution and post-execution scripts defined. Within the migrations folder defined by **dir** configuration property, 4 files are interpreted: pre.up, pre.down, post.up, post.down. They can be useful when additional action is required before of after the migration execution. 
 
 ##  Development
 

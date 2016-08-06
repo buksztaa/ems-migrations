@@ -50,15 +50,18 @@ public class MigrationManagerFactory {
         String connectionUser   = parameters.get(Properties.USER.propertyName);
         String connectionPw     = parameters.get(Properties.PW.propertyName);
         String emsHome          = parameters.get(Properties.EMSHOME.propertyName);
+        String strategy         = Properties.getPropertyFromMap(Properties.STRATEGY, parameters);
 
         EmsConnection connection = EmsConnection.create(connectionUrl, connectionUser, connectionPw, emsHome);
+
+        Class<? extends MigrationExecutor> strategyImplementation = MigrationExecutorStrategy.getByValue(strategy).impl;
 
         if (DEFAULT.equals(type)) {
             if (migrationsDir == null)  {
                 throw new MigrationException("Cannot create MigrationManager. Param " + Properties.DIR.propertyName + " not provided.");
             }
 
-            result =  FileMigrationManager.create(migrationsDir, connection);
+            result =  FileMigrationManager.create(migrationsDir, connection, strategyImplementation);
         } else {
             throw new MigrationException("Unknown MigrationManager type: " + type);
         }

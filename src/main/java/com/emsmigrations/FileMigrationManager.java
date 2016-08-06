@@ -37,8 +37,8 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
 
     private final FileHandler fileHandler;
 
-    private FileMigrationManager(String migrationsDir, EmsConnection connection) throws MigrationException{
-        super(connection);
+    private FileMigrationManager(String migrationsDir, EmsConnection connection, Class<? extends MigrationExecutor> strategy) throws MigrationException{
+        super(connection, strategy);
         this.migrationDir = migrationsDir;
         this.fileHandler = FileHandler.create(migrationsDir);
     }
@@ -49,8 +49,8 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
     --------------------------------------------------------------------------------------------------------------------
      */
 
-    public static FileMigrationManager create(String migrationsDir, EmsConnection connection) throws MigrationException{
-        return new FileMigrationManager(migrationsDir, connection);
+    public static FileMigrationManager create(String migrationsDir, EmsConnection connection, Class<? extends MigrationExecutor> strategy) throws MigrationException{
+        return new FileMigrationManager(migrationsDir, connection, strategy);
     }
 
     @Override

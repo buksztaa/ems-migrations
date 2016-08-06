@@ -41,6 +41,7 @@ public enum Properties {
     VER             ("ver",         null,                                                   "Migration version"),
     DESC            ("desc",        null,                                                   "Migration description"),
     TYPE            ("type",        "file",                                                 "Migrations type"),
+    STRATEGY        ("strategy",    MigrationExecutorStrategy.TERMINATE.value,              "Migrations strategy"),
     COMMAND         ("command",     null,                                                   "Application command"),
     CONFACTORY      ("confactory",  "QueueConnectionFactory",                               "EMS connection factory object"),
     QUEUE           ("queue",       "q.ems-migrations.server.version",                      "EMS migration queue"),

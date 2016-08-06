@@ -23,6 +23,9 @@
  */
 package com.emsmigrations;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by adambuksztaler on 05/08/16.
  */
@@ -35,9 +38,18 @@ public enum MigrationExecutorStrategy {
         public final String value;
         public final Class<? extends MigrationExecutor> impl;
 
+        public static final List<MigrationExecutorStrategy> enumerations = Arrays.asList(MigrationExecutorStrategy.values());
+
         MigrationExecutorStrategy(String value, Class<? extends MigrationExecutor> impl) {
             this.value = value;
             this.impl = impl;
+        }
+
+        public static MigrationExecutorStrategy getByValue(String value) {
+            return enumerations.stream()
+                    .filter(e -> (e.value == value))
+                    .findFirst()
+                    .get();
         }
 
 }

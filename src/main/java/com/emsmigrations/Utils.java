@@ -23,6 +23,9 @@
  */
 package com.emsmigrations;
 
+import java.io.File;
+import java.util.Map;
+
 /**
  * Various utility methods used across the application.
  */
@@ -34,6 +37,43 @@ public interface Utils {
 
     default <T> T nvl(T value1, T value2) {
         return (value1 == null || value1.toString().isEmpty()) ? value2 : value1;
+    }
+
+    default int extractMigrationNumber(String migrationFilePath) {
+        int result = -1;
+        File file = new File(migrationFilePath);
+        String migrationFileName = file.getName();
+        if (migrationFileName != null && migrationFileName.matches("^[0-9]{5}_.+\\..+")) {
+            result = Integer.parseInt(migrationFileName.substring(0, 5));
+        }
+
+        return result;
+    }
+
+    default int extractLargestSuccessfulMigrationNumber(Map<String, Boolean> migrationResults, int initialValue) {
+        final int[] result = {initialValue};
+        if (migrationResults != null) {
+            migrationResults.entrySet().forEach(entry -> {
+                if (entry.getValue()) {
+                    result[0] = Integer.max(result[0], extractMigrationNumber(entry.getKey()));
+                }
+            });
+        }
+
+        return result[0];
+    }
+
+    default int extractLowestSuccessfulMigrationNumber(Map<String, Boolean> migrationResults, int initialValue) {
+        final int[] result = {initialValue};
+        if (migrationResults != null) {
+            migrationResults.entrySet().forEach(entry -> {
+                if (entry.getValue() && extractMigrationNumber(entry.getKey()) > -1) {
+                    result[0] = Integer.min(result[0], extractMigrationNumber(entry.getKey()));
+                }
+            });
+        }
+
+        return result[0];
     }
 
 }

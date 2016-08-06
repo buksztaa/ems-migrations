@@ -24,8 +24,6 @@
 
 package com.emsmigrations;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,13 +81,13 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
             }
 
             List<String> migrations = fileHandler.getMigrationsUp(remoteVersion + 1, version);
+            List<String> rollbacks = fileHandler.getMigrationsDown(remoteVersion + 1, version);
 
 
-            for (String m : migrations) {
-                result.put(new File(m).getName(), emsAdminHandler.execute(m, null));
-            }
+            MigrationExecutor executor = MigrationExecutor.create(MigrationExecutorTerminateStrategy.class, emsAdminHandler);
+            result.putAll(executor.execute(migrations, rollbacks, null));
 
-            jmsHandler.setVersion(version);
+            jmsHandler.setVersion(executor.getLastSuccessfulUpMigrationNumber(version));
         } finally {
             jmsHandler.closeConnection();
         }
@@ -114,12 +112,12 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
             }
 
             List<String> migrations = fileHandler.getMigrationsDown(version + 1, remoteVersion);
+            List<String> rollbacks = fileHandler.getMigrationsUp(version + 1, remoteVersion);
 
-            for (String m : migrations) {
-                result.put(new File(m).getPath(), emsAdminHandler.execute(m, null));
-            }
+            MigrationExecutor executor = MigrationExecutor.create(MigrationExecutorTerminateStrategy.class, emsAdminHandler);
+            result.putAll(executor.execute(migrations, rollbacks, null));
 
-            jmsHandler.setVersion(version);
+            jmsHandler.setVersion(executor.getLastSuccessfulDownMigrationNumber(remoteVersion));
         } finally {
             jmsHandler.closeConnection();
         }

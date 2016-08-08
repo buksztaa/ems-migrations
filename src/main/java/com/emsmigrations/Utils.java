@@ -24,6 +24,9 @@
 package com.emsmigrations;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,6 +77,16 @@ public interface Utils {
         }
 
         return result[0];
+    }
+
+    default <T> List<T> sublistAfter(List<T> list, T element) {
+        List<T> sublist = new ArrayList<>();
+
+        if (list != null && element != null && list.contains(element)) {
+            sublist = list.subList(list.indexOf(element), list.size());
+        }
+
+        return sublist;
     }
 
 }

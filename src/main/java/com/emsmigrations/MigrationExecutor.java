@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public abstract class MigrationExecutor implements Utils{
 
-    private final EmsAdminHandler emsHandler;
+    protected final EmsAdminHandler emsHandler;
     protected Map<String, Boolean> result;
 
     public MigrationExecutor(EmsAdminHandler emsHandler ) {

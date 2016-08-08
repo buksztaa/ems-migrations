@@ -23,33 +23,18 @@
  */
 package com.emsmigrations;
 
-import java.util.Arrays;
-import java.util.List;
+import org.junit.Test;
 
 /**
- * Created by adambuksztaler on 05/08/16.
+ * Created by adambuksztaler on 08/08/16.
  */
-public enum MigrationExecutorStrategy {
+public class MigrationExecutorStrategyTest extends ExtendedTestCase {
 
-        IGNORE("ignore", MigrationExecutorIgnoreStrategy.class),
-        ROLLBACK("rollback", MigrationExecutorRollbackStrategy.class),
-        TERMINATE("terminate", MigrationExecutorTerminateStrategy.class);
-
-        public final String value;
-        public final Class<? extends MigrationExecutor> impl;
-
-        public static final List<MigrationExecutorStrategy> enumerations = Arrays.asList(MigrationExecutorStrategy.values());
-
-        MigrationExecutorStrategy(String value, Class<? extends MigrationExecutor> impl) {
-            this.value = value;
-            this.impl = impl;
-        }
-
-        public static MigrationExecutorStrategy getByValue(String value) {
-            return enumerations.stream()
-                    .filter(e -> (e.value.equalsIgnoreCase(value)))
-                    .findFirst()
-                    .get();
-        }
+    @Test
+    public void testGetByValue() {
+        assertEquals(MigrationExecutorStrategy.IGNORE, MigrationExecutorStrategy.getByValue("ignore"));
+        assertEquals(MigrationExecutorStrategy.ROLLBACK, MigrationExecutorStrategy.getByValue("rollback"));
+        assertEquals(MigrationExecutorStrategy.TERMINATE, MigrationExecutorStrategy.getByValue("terminate"));
+    }
 
 }

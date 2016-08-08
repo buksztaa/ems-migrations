@@ -25,7 +25,9 @@ package com.emsmigrations;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -122,6 +124,26 @@ public class UtilsTest extends ExtendedTestCase implements Utils{
 
         Map<String, Boolean> map5 = null;
         assertEquals(3, extractLowestSuccessfulMigrationNumber(map5, 3));
+
+    }
+
+    @Test
+    public void testSublistAfter() {
+        List<String> list = new ArrayList<>();
+        list.add("/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/pre.down");
+        list.add("/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/down/00003_CreateTopics.down");
+        list.add("/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/down/00002_CreateQueues.down");
+        list.add("/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/down/00001_CreateUsers.down");
+        list.add("/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/down/post.down");
+
+        assertEquals(0, sublistAfter(list, "nonexisting").size());
+        assertEquals(5, sublistAfter(list, "/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/pre.down").size());
+        assertEquals(4, sublistAfter(list, "/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/down/00003_CreateTopics.down").size());
+        assertEquals(3, sublistAfter(list, "/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/down/00002_CreateQueues.down").size());
+        assertEquals(2, sublistAfter(list, "/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/down/00001_CreateUsers.down").size());
+        assertEquals(1, sublistAfter(list, "/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/down/post.down").size());
+        assertEquals(0, sublistAfter(list, null).size());
+        assertEquals(0, sublistAfter(null, "/Users/me/Sources/ems-migrations/build/distributions/ems-m-0.0.1-SNAPSHOT/bin/../migrations/down/post.down").size());
 
     }
 

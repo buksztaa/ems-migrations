@@ -39,8 +39,25 @@ public class MigrationExecutorRollbackStrategy extends MigrationExecutor {
         rollbackAfterFailure(migrations, rollbacks, failedMigration, options);
     }
 
-    protected void rollbackAfterFailure(List<String> migrations, List<String> rollbacks, String failedMigration, Map<String, String> options) throws MigrationException {
+    private void rollbackAfterFailure(List<String> migrations, List<String> rollbacks, String failedMigration, Map<String, String> options) throws MigrationException {
+        List<String> rollbacksToRun = sublistAfter(rollbacks, failedMigration);
+
+        MigrationExecutor ignoreExec = MigrationExecutor.create(MigrationExecutorIgnoreStrategy.class, emsHandler);
+
+        if (rollbacksToRun != null && rollbacksToRun.size() > 0) {
+            ignoreExec.execute(rollbacksToRun, null, options);
+        }
 
         throw new MigrationException("Terminated after rollback");
+    }
+
+    @Override
+    public int getLastSuccessfulUpMigrationNumber(int initialValue) {
+        return initialValue;
+    }
+
+    @Override
+    public int getLastSuccessfulDownMigrationNumber(int initialValue) {
+        return initialValue;
     }
 }

@@ -87,7 +87,7 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
             MigrationExecutor executor = MigrationExecutor.create(MigrationExecutorTerminateStrategy.class, emsAdminHandler);
             result.putAll(executor.execute(migrations, rollbacks, null));
 
-            jmsHandler.setVersion(executor.getLastSuccessfulUpMigrationNumber(version));
+            jmsHandler.setVersion(executor.getLastSuccessfulUpMigrationNumber(remoteVersion));
         } finally {
             jmsHandler.closeConnection();
         }
@@ -117,7 +117,7 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
             MigrationExecutor executor = MigrationExecutor.create(MigrationExecutorTerminateStrategy.class, emsAdminHandler);
             result.putAll(executor.execute(migrations, rollbacks, null));
 
-            jmsHandler.setVersion(executor.getLastSuccessfulDownMigrationNumber(remoteVersion));
+            jmsHandler.setVersion(executor.getLastSuccessfulDownMigrationNumber(remoteVersion) - 1);
         } finally {
             jmsHandler.closeConnection();
         }

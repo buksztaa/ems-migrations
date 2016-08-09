@@ -23,6 +23,7 @@
  */
 package com.emsmigrations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,21 +35,14 @@ public class MigrationExecutorRollbackStrategy extends MigrationExecutor {
         super(emsHandler);
     }
 
+    /*
+    --------------------------------------------------------------------------------------------------------------------
+        INTERFACE
+    --------------------------------------------------------------------------------------------------------------------
+     */
     @Override
     protected void onMigrationFailure(List<String> migrations, List<String> rollbacks, String failedMigration, Map<String, String> options) throws MigrationException {
-        rollbackAfterFailure(migrations, rollbacks, failedMigration, options);
-    }
-
-    private void rollbackAfterFailure(List<String> migrations, List<String> rollbacks, String failedMigration, Map<String, String> options) throws MigrationException {
-        List<String> rollbacksToRun = sublistAfter(rollbacks, failedMigration);
-
-        MigrationExecutor ignoreExec = MigrationExecutor.create(MigrationExecutorIgnoreStrategy.class, emsHandler);
-
-        if (rollbacksToRun != null && rollbacksToRun.size() > 0) {
-            ignoreExec.execute(rollbacksToRun, null, options);
-        }
-
-        throw new MigrationException("Terminated after rollback");
+        rollbackAfterFailure(rollbacks, failedMigration, options);
     }
 
     @Override
@@ -60,4 +54,34 @@ public class MigrationExecutorRollbackStrategy extends MigrationExecutor {
     public int getLastSuccessfulDownMigrationNumber(int initialValue) {
         return initialValue;
     }
+
+    /*
+    --------------------------------------------------------------------------------------------------------------------
+        PRIVATE SECTION
+    --------------------------------------------------------------------------------------------------------------------
+     */
+
+    private void rollbackAfterFailure(List<String> rollbacks, String failedMigration, Map<String, String> options) throws MigrationException {
+        List<String> rollbacksToRun = sublistRollbacks(rollbacks, failedMigration);
+
+        MigrationExecutor ignoreExec = MigrationExecutor.create(MigrationExecutorIgnoreStrategy.class, emsHandler);
+        System.out.println("Rollbacks to run:");
+        rollbacksToRun.forEach(r -> System.out.println(r));
+        if (rollbacksToRun != null && rollbacksToRun.size() > 0) {
+            ignoreExec.execute(rollbacksToRun, null, options);
+            System.out.println("Rollbacks executed");
+        }
+
+        throw new MigrationException("Terminated after rollback");
+    }
+
+    private List<String> sublistRollbacks(List<String> rollbacks, String failedMigration) {
+        int failedMigrationNumber = extractMigrationNumber(failedMigration);
+        String rollbackToBeginWith = rollbacks.stream()
+                .filter(r -> (extractMigrationNumber(r) == failedMigrationNumber))
+                .findFirst()
+                .get();
+        return sublistAfter(rollbacks, rollbackToBeginWith);
+    }
+
 }

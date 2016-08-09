@@ -84,7 +84,7 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
             List<String> rollbacks = fileHandler.getMigrationsDown(remoteVersion + 1, version);
 
 
-            MigrationExecutor executor = MigrationExecutor.create(MigrationExecutorTerminateStrategy.class, emsAdminHandler);
+            MigrationExecutor executor = MigrationExecutor.create(strategy, emsAdminHandler);
             result.putAll(executor.execute(migrations, rollbacks, null));
 
             jmsHandler.setVersion(executor.getLastSuccessfulUpMigrationNumber(remoteVersion));
@@ -114,7 +114,7 @@ public class FileMigrationManager extends AbstractMigrationManager implements Ut
             List<String> migrations = fileHandler.getMigrationsDown(version + 1, remoteVersion);
             List<String> rollbacks = fileHandler.getMigrationsUp(version + 1, remoteVersion);
 
-            MigrationExecutor executor = MigrationExecutor.create(MigrationExecutorTerminateStrategy.class, emsAdminHandler);
+            MigrationExecutor executor = MigrationExecutor.create(strategy, emsAdminHandler);
             result.putAll(executor.execute(migrations, rollbacks, null));
 
             jmsHandler.setVersion(executor.getLastSuccessfulDownMigrationNumber(remoteVersion) - 1);

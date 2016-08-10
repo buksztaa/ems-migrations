@@ -72,6 +72,7 @@ All configuration properties are enlisted below:
 | user              | EMS connection username                                                       | X         | admin                                                 |
 | pw                | EMS connection password                                                       |           |                                                       |
 | type              | Migrations type                                                               |           | file                                                  |
+| strategy          | Migrations strategy                                                           |           | terminate                                             |
 | confactory        | EMS connection factory object                                                 |           | QueueConnectionFactory                                |
 | queue             | EMS migration queue                                                           |           | q.ems-migrations.server.version                       |
 | ctxfactory        | Initial context factory class                                                 |           | com.tibco.tibjms.naming.TibjmsInitialContextFactory   |
@@ -79,6 +80,14 @@ All configuration properties are enlisted below:
 ### Pre and post scripts
 
 Migrate rollback commands can have pre-execution and post-execution scripts defined. Within the migrations folder defined by **dir** configuration property, 4 files are interpreted: pre.up, pre.down, post.up, post.down. They can be useful when additional action is required before of after the migration execution. 
+
+### Strategies
+
+EMS migrations can handle errors during the migration in three different ways:
+
+1. **Terminate** - default behaviour. After a failed migration the program stops it's processing. Migration version of the target EMS is set to the last successful migration. This being a default anf thus not defined in the configuration is an equivalent of **strategy=terminate**
+2. **Ignore** - After a failed migration, the program does not stop it's processing and goes on with the remaining migrations. Migration version of the target EMS is set to the last successful migration. To set this put **strategy=ignore** to your configuration file.
+3. **Rollback** - After a failed migration, the program stops processing and runs equivalent opposite direction migrations, to rollback all changes done by the current program run. To activate this strategy put **strategy=rollback** to your configuration file.
 
 ##  Development
 
